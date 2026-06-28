@@ -6,7 +6,7 @@ const CONN_DIST = 0.72;
 const SPEED_Y   = 0.0022;
 const SPEED_X   = 0.0006;
 const PULSE_AMP = 0.14;  // ±14% radius — visible but gentle
-const PULSE_HZ  = 0.18;  // ~5.5s per breath (slow, natural breathing pace)
+const PULSE_HZ  = 0.12;  // ~8s per breath (slower, deep breathing pace)
 
 type V3 = { x: number; y: number; z: number };
 
