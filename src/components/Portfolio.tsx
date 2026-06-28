@@ -176,7 +176,37 @@ function Navbar() {
           }}
         >
           <a href="#home" className="logo-badge">
-            <span className="logo-badge-text text-gradient-purple">KN</span>
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* outer ring */}
+              <circle cx="22" cy="22" r="20.5" stroke="url(#logo-ring)" strokeWidth="0.85"/>
+              {/* subtle inner ring for depth */}
+              <circle cx="22" cy="22" r="17" stroke="url(#logo-ring2)" strokeWidth="0.4"/>
+              {/* KN monogram */}
+              <text
+                x="22" y="26.5"
+                textAnchor="middle"
+                fontFamily="inherit"
+                fontSize="11"
+                fontWeight="500"
+                letterSpacing="2"
+                fill="url(#logo-text)"
+              >KN</text>
+              <defs>
+                <linearGradient id="logo-ring" x1="2" y1="2" x2="42" y2="42" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   stopColor="#c4b5fd" stopOpacity="0.75"/>
+                  <stop offset="45%"  stopColor="#7c3aed" stopOpacity="0.35"/>
+                  <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.65"/>
+                </linearGradient>
+                <linearGradient id="logo-ring2" x1="2" y1="2" x2="42" y2="42" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   stopColor="#a78bfa" stopOpacity="0.2"/>
+                  <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.04"/>
+                </linearGradient>
+                <linearGradient id="logo-text" x1="10" y1="16" x2="34" y2="30" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   stopColor="#ede9fe"/>
+                  <stop offset="100%" stopColor="#a78bfa"/>
+                </linearGradient>
+              </defs>
+            </svg>
           </a>
           <nav className="hidden md:flex items-center gap-7">
             {NAV.map((n) => (
