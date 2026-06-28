@@ -5,8 +5,8 @@ const N         = 130;
 const CONN_DIST = 0.72;
 const SPEED_Y   = 0.0022;
 const SPEED_X   = 0.0006;
-const PULSE_AMP = 0.10;  // ±10% radius pulse
-const PULSE_HZ  = 0.45;  // pulse cycles per second
+const PULSE_AMP = 0.14;  // ±14% radius — visible but gentle
+const PULSE_HZ  = 0.18;  // ~5.5s per breath (slow, natural breathing pace)
 
 type V3 = { x: number; y: number; z: number };
 
@@ -85,8 +85,12 @@ export default function HeroVisual() {
 
       ctx.clearRect(0, 0, W, H);
 
-      // ── Pulse: smoothly contract and expand ────────────────────────────────
-      const pulse = 1 + PULSE_AMP * Math.sin(elapsed * PULSE_HZ * Math.PI * 2);
+      // ── Breathing pulse: slow inhale (expand) → slight hold → exhale (contract)
+      const rawSin  = Math.sin(elapsed * PULSE_HZ * Math.PI * 2); // -1 to 1
+      const breathT = (rawSin + 1) / 2;                           // 0 to 1
+      // smoothstep³ makes the curve linger at the top (full inhale) and bottom
+      const smooth  = breathT * breathT * (3 - 2 * breathT);
+      const pulse   = 1 + PULSE_AMP * (smooth * 2 - 1);           // maps back to ±AMP
       const R   = Math.min(W, H) * 0.38 * pulse;
       const fov = R * 2.6;
 
