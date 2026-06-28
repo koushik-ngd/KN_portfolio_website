@@ -166,16 +166,6 @@ export default function BlogPage() {
             Back to portfolio
           </a>
 
-          <span
-            style={{
-              fontSize: "0.7rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.2em",
-              color: "oklch(0.55 0.04 270)",
-            }}
-          >
-            Koushik Nagardona — Blog
-          </span>
         </div>
       </header>
 
