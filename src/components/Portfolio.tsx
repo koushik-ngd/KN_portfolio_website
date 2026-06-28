@@ -217,7 +217,7 @@ function Navbar() {
           </nav>
           <a
             href="#contact"
-            className="hidden md:inline-flex text-xs uppercase tracking-widest px-4 py-2 rounded-full border border-white/15 hover:border-purple hover:text-purple transition"
+            className="hidden md:inline-flex text-xs uppercase tracking-widest px-4 py-2 rounded-full bg-purple-600 text-white border border-purple-600 hover:bg-purple-500 hover:border-purple-500 transition"
           >
             Get in touch
           </a>
