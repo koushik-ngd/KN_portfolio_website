@@ -333,7 +333,7 @@ function About() {
         <div className="reveal grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             { n: "1M+", l: "Rows Analyzed" },
-            { n: "3",   l: "Projects Shipped" },
+            { n: "10+", l: "Projects Shipped" },
             { n: "6",   l: "Hackathons Led" },
           ].map((s) => (
             <div key={s.l} className="glass-card glass-card-hover rounded-2xl p-8">
