@@ -5,8 +5,9 @@ const N         = 130;
 const CONN_DIST = 0.72;
 const SPEED_Y   = 0.0022;
 const SPEED_X   = 0.0006;
-const PULSE_AMP = 0.14;  // ±14% radius — visible but gentle
-const PULSE_HZ  = 0.12;  // ~8s per breath (slower, deep breathing pace)
+const PULSE_AMP  = 0.14;  // ±14% radius — visible but gentle
+const PULSE_HZ   = 0.12;  // ~8s per breath (slower, deep breathing pace)
+const COLOR_HZ   = 0.055; // ~18s per purple↔white color cycle
 
 type V3 = { x: number; y: number; z: number };
 
@@ -123,6 +124,18 @@ export default function HeroVisual() {
         }
       }
 
+      // ── Color cycle: purple → white → purple ──────────────────────────────
+      // smooth 0→1→0 oscillation using a raised cosine
+      const colorT  = (1 - Math.cos(elapsed * COLOR_HZ * Math.PI * 2)) / 2;
+      // purple core  rgb(192,132,252)  →  white rgb(255,255,255)
+      const cr = Math.round(192 + (255 - 192) * colorT);
+      const cg = Math.round(132 + (255 - 132) * colorT);
+      const cb = Math.round(252 + (255 - 252) * colorT);
+      // dot surface: purple-white rgb(233,213,255) → white
+      const sr = Math.round(233 + (255 - 233) * colorT);
+      const sg = Math.round(213 + (255 - 213) * colorT);
+      const sb = Math.round(255);
+
       // ── Dots ───────────────────────────────────────────────────────────────
       for (const p of pp) {
         const t     = (p.z + 1) / 2;
@@ -130,8 +143,8 @@ export default function HeroVisual() {
         const r     = 1.1 + t * 2.8;
 
         const grd = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, r * 4);
-        grd.addColorStop(0, `rgba(192,132,252,${(alpha * 0.6).toFixed(3)})`);
-        grd.addColorStop(1, "rgba(192,132,252,0)");
+        grd.addColorStop(0, `rgba(${cr},${cg},${cb},${(alpha * 0.6).toFixed(3)})`);
+        grd.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
         ctx.beginPath();
         ctx.arc(p.sx, p.sy, r * 4, 0, Math.PI * 2);
         ctx.fillStyle = grd;
@@ -139,7 +152,7 @@ export default function HeroVisual() {
 
         ctx.beginPath();
         ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(233,213,255,${alpha.toFixed(3)})`;
+        ctx.fillStyle = `rgba(${sr},${sg},${sb},${alpha.toFixed(3)})`;
         ctx.fill();
       }
 
