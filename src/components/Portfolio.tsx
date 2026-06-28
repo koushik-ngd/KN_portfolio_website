@@ -334,7 +334,7 @@ function About() {
           {[
             { n: "1M+", l: "Rows Analyzed" },
             { n: "3",   l: "Projects Shipped" },
-            { n: "2",   l: "Hackathons Led" },
+            { n: "6",   l: "Hackathons Led" },
           ].map((s) => (
             <div key={s.l} className="glass-card glass-card-hover rounded-2xl p-8">
               <div className="text-5xl font-display font-bold text-gradient-purple">{s.n}</div>
