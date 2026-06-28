@@ -26,7 +26,7 @@ const ALL_POSTS: Post[] = [
     content: [
       "Attended Campus to Corporate at the University of Birmingham Dubai today and I genuinely did not expect to enjoy it this much.",
       "Met people from Citi, Beehive Fintech, Lift Mart Elevators & Escalators LLC, Innovation City and CyberKnight, had real conversations, and walked away feeling like all the late nights building projects actually mean something.",
-      "We also had some genuinely good workshops. Tarek Farran from Binance talked about financial literacy and blockchain in a way that actually made sense for once. Jason Rego from Sony talked about Kando — emotion in Japanese — and how Sony thinks about making people feel something through their products. Both were solid.",
+      "We also had some genuinely good workshops. Tarek Farran from Binance talked about financial literacy and blockchain in a way that actually made sense for once. Jason Rego from Sony talked about Kando, emotion in Japanese, and how Sony thinks about making people feel something through their products. Both were solid.",
       "The discussion panel at the end was a great way to close out the day.",
       "The networking part surprised me the most honestly. I've met some amazing people. I always assumed it would feel awkward and transactional but it really did not. When you actually care about what people are building the conversations just flow.",
       "If you are a student sitting at home convincing yourself these events are not worth it, they are. Just show up.",
