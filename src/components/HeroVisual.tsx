@@ -5,22 +5,10 @@ const N         = 130;
 const CONN_DIST = 0.72;
 const SPEED_Y   = 0.0022;
 const SPEED_X   = 0.0006;
-const HOLD_SEC  = 2.5;   // seconds to hold each shape
-const MORPH_SEC = 2.5;   // seconds for each transition
-const PHASE_DUR = HOLD_SEC + MORPH_SEC;
+const PULSE_AMP = 0.10;  // ±10% radius pulse
+const PULSE_HZ  = 0.45;  // pulse cycles per second
 
 type V3 = { x: number; y: number; z: number };
-
-// ── Ease in-out (smoothstep) ──────────────────────────────────────────────────
-function easeInOut(t: number): number {
-  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-}
-
-function lerp3(a: V3, b: V3, t: number): V3 {
-  return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, z: a.z + (b.z - a.z) * t };
-}
-
-// ── Shape generators (all derived from same Fibonacci distribution) ───────────
 
 // Sphere — Fibonacci spiral
 const SPHERE: V3[] = (() => {
@@ -33,37 +21,6 @@ const SPHERE: V3[] = (() => {
   }
   return pts;
 })();
-
-// Cube — project each sphere ray onto the L∞ unit cube, then scale
-const CUBE: V3[] = SPHERE.map(({ x, y, z }) => {
-  const m = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
-  const s = 0.82 / m;
-  return { x: x * s, y: y * s, z: z * s };
-});
-
-// Diamond (octahedron) — project onto L1 sphere, then scale
-const DIAMOND: V3[] = SPHERE.map(({ x, y, z }) => {
-  const m = Math.abs(x) + Math.abs(y) + Math.abs(z);
-  const s = 1.2 / m;
-  return { x: x * s, y: y * s, z: z * s };
-});
-
-// Square pyramid — apex (0,0,1), square base at z=-1 with corners (±1,±1,-1)
-// Face planes: base z=-1; sides ±2x+z=1, ±2y+z=1
-// Cast a ray from origin in direction p and find minimum positive t.
-const PYRAMID: V3[] = SPHERE.map(({ x, y, z }) => {
-  let t = Infinity;
-  if (z < -1e-9)          t = Math.min(t, -1 / z);
-  if ( 2*x + z > 1e-9)   t = Math.min(t, 1 / ( 2*x + z));
-  if (-2*x + z > 1e-9)   t = Math.min(t, 1 / (-2*x + z));
-  if ( 2*y + z > 1e-9)   t = Math.min(t, 1 / ( 2*y + z));
-  if (-2*y + z > 1e-9)   t = Math.min(t, 1 / (-2*y + z));
-  if (!isFinite(t) || t <= 0) t = 1;
-  const s = 0.78;
-  return { x: x * t * s, y: y * t * s, z: z * t * s };
-});
-
-const SHAPES: V3[][] = [SPHERE, CUBE, DIAMOND, PYRAMID];
 
 // ── Rotation helpers ──────────────────────────────────────────────────────────
 const ry = (p: V3, a: number): V3 => ({
@@ -128,25 +85,14 @@ export default function HeroVisual() {
 
       ctx.clearRect(0, 0, W, H);
 
-      const R   = Math.min(W, H) * 0.38;
+      // ── Pulse: smoothly contract and expand ────────────────────────────────
+      const pulse = 1 + PULSE_AMP * Math.sin(elapsed * PULSE_HZ * Math.PI * 2);
+      const R   = Math.min(W, H) * 0.38 * pulse;
       const fov = R * 2.6;
-
-      // ── Morphing: hold → ease-in-out morph → hold → … ─────────────────────
-      const totalCycle = PHASE_DUR * SHAPES.length;
-      const cycle      = elapsed % totalCycle;
-      const phaseIdx   = Math.floor(cycle / PHASE_DUR);
-      const phaseT     = (cycle % PHASE_DUR) / PHASE_DUR;   // 0 → 1 within phase
-      const holdFrac   = HOLD_SEC / PHASE_DUR;               // fraction spent holding
-      const rawMorph   = phaseT < holdFrac ? 0 : (phaseT - holdFrac) / (1 - holdFrac);
-      const lerpT      = easeInOut(Math.min(rawMorph, 1));
-
-      const fromPts = SHAPES[phaseIdx];
-      const toPts   = SHAPES[(phaseIdx + 1) % SHAPES.length];
-      const pts     = fromPts.map((a, i) => lerp3(a, toPts[i], lerpT));
 
       // ── Project points with perspective ────────────────────────────────────
       type PP = { sx: number; sy: number; z: number; rp: V3 };
-      const pp: PP[] = pts.map((p) => {
+      const pp: PP[] = SPHERE.map((p) => {
         const q = rx(ry(p, rot.current.y), rot.current.x);
         const s = fov / (fov + q.z * R);
         return { sx: cx + q.x * R * s, sy: cy + q.y * R * s, z: q.z, rp: q };
