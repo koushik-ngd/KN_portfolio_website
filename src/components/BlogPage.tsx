@@ -160,9 +160,6 @@ export default function BlogPage() {
           <h1 ref={addReveal} className="reveal" style={{ fontSize: "clamp(2.8rem, 6vw, 5rem)", fontWeight: 800, lineHeight: 1.05, marginBottom: "1.25rem" }}>
             From the{" "}<span className="text-gradient-purple">notebook</span>.
           </h1>
-          <p ref={addReveal} className="reveal" style={{ fontSize: "1.05rem", color: "oklch(0.65 0.03 270)", maxWidth: "36rem", margin: "0 auto 2.5rem" }}>
-            Real posts, real events, real thoughts — straight from LinkedIn.
-          </p>
 
           {/* Search */}
           <div ref={addReveal} className="reveal" style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}>
